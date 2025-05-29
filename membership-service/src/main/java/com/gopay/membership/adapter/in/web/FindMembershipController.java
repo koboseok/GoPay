@@ -1,10 +1,10 @@
 package com.gopay.membership.adapter.in.web;
 
 
+import com.gopay.common.WebAdapter;
 import com.gopay.membership.application.port.in.FindMembershipCommand;
 import com.gopay.membership.application.port.in.FindMembershipUseCase;
 import com.gopay.membership.domain.Membership;
-import common.WebAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

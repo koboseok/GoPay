@@ -1,7 +1,8 @@
 package com.gopay.membership.application.port.in;
 
+import com.gopay.common.UseCase;
 import com.gopay.membership.domain.Membership;
-import common.UseCase;
+
 
 @UseCase
 public interface RegisterMembershipUseCase {

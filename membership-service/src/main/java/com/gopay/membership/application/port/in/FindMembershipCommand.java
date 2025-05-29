@@ -1,7 +1,7 @@
 package com.gopay.membership.application.port.in;
 
 
-import common.SelfValidating;
+import com.gopay.common.SelfValidating;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

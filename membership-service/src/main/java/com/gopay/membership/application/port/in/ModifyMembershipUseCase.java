@@ -5,8 +5,8 @@ import com.gopay.membership.domain.Membership;
 
 
 @UseCase
-public interface FindMembershipUseCase {
+public interface ModifyMembershipUseCase {
     // 비즈니스 로직 정의
 
-    Membership findMembership(FindMembershipCommand command);
+    Membership modifyMembership(ModifyMembershipCommand command);
 }
