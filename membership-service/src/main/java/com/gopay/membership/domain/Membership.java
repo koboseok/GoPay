@@ -87,7 +87,7 @@ public class Membership {
 
     @Value
     public static class MembershipIsCorp {
-        public MembershipIsCorp(Boolean value) {
+        public MembershipIsCorp(boolean value) {
             this.isCorp = value;
         }
         boolean isCorp;

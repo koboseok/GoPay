@@ -17,11 +17,30 @@ services:
       - MYSQL_USER=mysqluser
       - MYSQL_PASSWORD=mysqlpw
   membership-service:
-    image: gopay-membership-service:1.0.1
+    image: gopay-membership-service:1.0.2
     networks:
       - gopay_network
     ports: # 8081 -> 8080 port forwarding /  os 레벨에서 컨테이너까지 어떤 포트로 매핑될것인지 : 컨테이너 안에있는 어플리케이션 포트
       - "8081:8080"
+    depends_on:
+      - mysql
+    environment:
+      - AXON_AXONSERVER_SERVERS=axon-server:8124
+      - AXON_SERIALIZER_EVENTS=jackson
+      - AXON_SERIALIZER_MESSAGES=jackson
+      - AXON_SERIALIZER_GENERAL=xstream
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/gopay?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=mysqluser
+      - SPRING_DATASOURCE_PASSWORD=mysqlpw
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL5InnoDBDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  banking-service:
+    image: gopay-banking-service:1.0.0
+    networks:
+      - gopay_network
+    ports: # 8082 -> 8080 port forwarding /  os 레벨에서 컨테이너까지 어떤 포트로 매핑될것인지 : 컨테이너 안에있는 어플리케이션 포트
+      - "8082:8080"
     depends_on:
       - mysql
     environment:

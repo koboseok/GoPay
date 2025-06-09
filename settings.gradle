@@ -2,3 +2,5 @@ rootProject.name = 'gopay'
 
 include 'membership-service'
 include 'common'
+include 'banking-service'
+include 'banking-service'
