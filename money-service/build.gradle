@@ -1,0 +1,56 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.12'  // 원하는 Spring Boot 버전으로 변경 가능
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'com.palantir.docker' version '0.25.0' // docker plugin
+    id 'java'
+}
+
+group = 'com.gopay.money'
+version = '1.0.0'
+sourceCompatibility = '11'
+targetCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+//    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+
+    testImplementation("org.junit.vintage:junit-vintage-engine") {
+        exclude group: "org.hamcrest", module: "hamcrest-core"
+    }
+
+    // module
+    implementation project(path: ':common')
+
+    testImplementation 'com.tngtech.archunit:archunit:1.0.1'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform()
+    maxHeapSize = "1024m" //원하는 만큼 변경
+}
+
+// docker plugin
+// gradle 과정에서 dockerizing
+docker {
+    println(tasks.bootJar.outputs.files) // 디버깅용
+    name rootProject.name+'-'+project.name + ":" + version // 이미지 이름
+    dockerfile file('../Dockerfile') // 어떤 docker file
+    files tasks.bootJar.outputs.files // 어떤 파일들을 dockerfile에 복사할 것인지
+    buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name]) // dockerfile에 전달할 인자
+}
