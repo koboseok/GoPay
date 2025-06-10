@@ -22,7 +22,7 @@ public class RegisterBankAccountController {
     // TODO: select
 
     @PostMapping(path = "/banking/account/register")
-    RegisteredBankAccount registerMemBership(@RequestBody RegisterBankAccountRequest request) {
+    RegisteredBankAccount registeredBankAccount(@RequestBody RegisterBankAccountRequest request) {
         // request ~~
         // request -> command
         // UseCase ~~ (request x, command o)

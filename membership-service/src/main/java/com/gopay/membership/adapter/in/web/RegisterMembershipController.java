@@ -21,6 +21,7 @@ public class RegisterMembershipController {
 
     @PostMapping(path = "/membership/register")
     Membership registerMemBership(@RequestBody RegisterMembershipRequest request) {
+        System.out.println("@@@@@@ controller 타냐타냐");
         // request ~~
         // request -> command
         // UseCase ~~ (request x, command o)
