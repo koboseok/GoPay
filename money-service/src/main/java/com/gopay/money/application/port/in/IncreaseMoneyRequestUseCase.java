@@ -10,4 +10,5 @@ public interface IncreaseMoneyRequestUseCase {
     // 비즈니스 로직 정의
 
     MoneyChangingRequest increaseMoneyRequest(IncreaseMoneyRequestCommand command);
+    MoneyChangingRequest increaseMoneyRequestAsync(IncreaseMoneyRequestCommand command);
 }
