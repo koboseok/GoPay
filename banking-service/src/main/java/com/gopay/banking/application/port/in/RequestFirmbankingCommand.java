@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class FirmbankingRequestCommand extends SelfValidating<FirmbankingRequestCommand> {
+public class RequestFirmbankingCommand extends SelfValidating<RequestFirmbankingCommand> {
 
     @NotNull
     private final String fromBankName;
@@ -27,7 +27,7 @@ public class FirmbankingRequestCommand extends SelfValidating<FirmbankingRequest
 
     private final int moneyAmount;
 
-    public FirmbankingRequestCommand(String fromBankName, String fromBankAccountNumber, String toBankName, String toBankAccountNumber, int moneyAmount) {
+    public RequestFirmbankingCommand(String fromBankName, String fromBankAccountNumber, String toBankName, String toBankAccountNumber, int moneyAmount) {
         this.fromBankName = fromBankName;
         this.fromBankAccountNumber = fromBankAccountNumber;
         this.toBankName = toBankName;

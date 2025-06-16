@@ -25,14 +25,14 @@ public class FirmbankingRequest {
     @Getter private final UUID uuid;
     // 고객 요청에 대해 항상 유니크한 id를 요청자에게 리턴
 
-
+    @Getter private final String aggregateIdentifier;
 
     public static FirmbankingRequest generateFirmbankingRequest(
             FirmbankingRequestId firmbankingRequestId, FromBankName fromBankName,
             FromBankAccountNumber fromBankAccountNumber, ToBankName toBankName,
             ToBankAccountNumber toBankAccountNumber, MoneyAmount moneyAmount,
             FirmbankingStatus firmbankingStatus,
-            UUID uuid) {
+            UUID uuid,  FirmbankingAggregateIdentifier firmbankingAggregateIdentifier) {
 
         return new FirmbankingRequest(
                 firmbankingRequestId.getFirmbankingRequestId(),
@@ -42,7 +42,8 @@ public class FirmbankingRequest {
                 toBankAccountNumber.getToBankAccountNumber(),
                 moneyAmount.getMoneyAmount(),
                 firmbankingStatus.getFirmbankingStatus(),
-                uuid
+                uuid,
+                firmbankingAggregateIdentifier.getAggregateIdentifier()
         );
     }
 
@@ -101,6 +102,14 @@ public class FirmbankingRequest {
             this.firmbankingStatus = value;
         }
         int firmbankingStatus ;
+    }
+
+    @Value
+    public static class FirmbankingAggregateIdentifier {
+        public FirmbankingAggregateIdentifier(String value) {
+            this.aggregateIdentifier = value;
+        }
+        String aggregateIdentifier;
     }
 
 

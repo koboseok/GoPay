@@ -8,5 +8,6 @@ import com.gopay.common.UseCase;
 public interface RequestFirmbankingUseCase {
     // 비즈니스 로직 정의
 
-    FirmbankingRequest registerFirmbanking(FirmbankingRequestCommand command);
+    FirmbankingRequest registerFirmbanking(RequestFirmbankingCommand command);
+    void requestFirmbankingByEvent(RequestFirmbankingCommand command);
 }
