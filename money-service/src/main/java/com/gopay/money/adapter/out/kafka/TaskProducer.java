@@ -34,29 +34,25 @@ public class TaskProducer implements SendRechargingMoneyTaskPort {
 
     @Override
     public void sendRechargingMoneyTask(RechargingMoneyTask task) {
-        // task를 받은 후 내부적으로 jsonString 형태로 파싱해서 카프카에 프로듀싱
-            this.sendMessage(task.getTaskId(), task);
+        this.sendMessage(task.getTaskId(), task);
     }
 
-
-    private void sendMessage(String key, RechargingMoneyTask value) {
+    public void sendMessage(String key, RechargingMoneyTask value) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonStringToProduce;
-
         // jsonString
-        try{
+        try {
             jsonStringToProduce = mapper.writeValueAsString(value);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, jsonStringToProduce);
         producer.send(record, (metadata, exception) -> {
             if (exception == null) {
-                System.out.println("Successfully sent message to " + metadata.offset());
+                // System.out.println("Message sent successfully. Offset: " + metadata.offset());
             } else {
                 exception.printStackTrace();
-                System.out.println("Failed to send message to " + exception.getMessage());
+                // System.err.println("Failed to send message: " + exception.getMessage());
             }
         });
     }

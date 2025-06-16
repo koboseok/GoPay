@@ -22,11 +22,11 @@ public class TaskConsumer {
     private final TaskResultProducer taskResultProducer;
 
     public TaskConsumer(@Value("${kafka.clusters.bootstrapservers}") String bootstrapServers,
-                        @Value("${logging.topic}") String topic, TaskResultProducer taskResultProducer) {
+                        @Value("${task.topic}") String topic, TaskResultProducer taskResultProducer) {
         this.taskResultProducer = taskResultProducer;
 
 
-        System.out.println("Starting logging consumer with bootstrap servers: " + bootstrapServers);
+
         // producer 초기화
         Properties props = new Properties();
         // kafka:29092

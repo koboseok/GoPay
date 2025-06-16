@@ -54,26 +54,23 @@ public class RechargingMoneyResultConsumer {
                 while (true) {
                     ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
                     for (ConsumerRecord<String, String> record : records) {
-                        System.out.println("Received message: " + record.key() + " / " + record.value());
-
-                        // record: RechargingMoneyTask, (all subtask is done)
+                        System.out.println("Received message: " + record.key()  + " / "+  record.value());
+                        // record: RechargingMoneyTask, ( all subtask is don)
 
 
                         RechargingMoneyTask task;
-
                         try {
                             task = mapper.readValue(record.value(), RechargingMoneyTask.class);
                         } catch (JsonProcessingException e) {
                             throw new RuntimeException(e);
                         }
-
                         List<SubTask> subTaskList = task.getSubTaskList();
 
                         boolean taskResult = true;
-
                         // validation membership
                         // validation banking
                         for (SubTask subTask : subTaskList) {
+                            // 한번만 실패해도 실패한 task 로 간주.
                             if (subTask.getStatus().equals("fail")) {
                                 taskResult = false;
                                 break;
@@ -84,33 +81,18 @@ public class RechargingMoneyResultConsumer {
                         if (taskResult) {
                             this.loggingProducer.sendMessage(task.getTaskId(), "task success");
                             this.countDownLatchManager.setDataForKey(task.getTaskId(), "success");
-                        } else {
+                        } else{
                             this.loggingProducer.sendMessage(task.getTaskId(), "task failed");
                             this.countDownLatchManager.setDataForKey(task.getTaskId(), "failed");
                         }
 
-                        // test
-//                        try {
-//                            Thread.sleep(3000);
-//                        } catch (InterruptedException e) {
-//                            throw new RuntimeException(e);
-//                        }
-
                         this.countDownLatchManager.getCountDownLatch(task.getTaskId()).countDown();
-
-
-
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             } finally {
                 consumer.close();
             }
         });
-
         consumerThread.start();
     }
-
-
 }

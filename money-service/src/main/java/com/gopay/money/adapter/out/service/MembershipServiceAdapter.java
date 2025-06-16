@@ -2,13 +2,13 @@ package com.gopay.money.adapter.out.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gopay.common.CommonHttpClient;
-import com.gopay.money.application.port.out.GetMemBershipPort;
+import com.gopay.money.application.port.out.GetMembershipPort;
 import com.gopay.money.application.port.out.Membership;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MembershipServiceAdapter implements GetMemBershipPort {
+public class MembershipServiceAdapter implements GetMembershipPort {
 
     private final CommonHttpClient commonHttpClient;
 

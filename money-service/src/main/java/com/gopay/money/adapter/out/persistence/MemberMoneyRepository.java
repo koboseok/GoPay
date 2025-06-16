@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface MemberMoneyRepository extends JpaRepository<MemberMoneyEntity, Long> {
 
-    @Query("SELECT e FROM MemberMoneyEntity e WHERE e.memberShipId = :membershipId")
-    List<MemberMoneyEntity> findByMemberShipId(@Param("membershipId") Long membershipId);
+    @Query("SELECT e FROM MemberMoneyEntity e WHERE e.membershipId = :membershipId")
+    List<MemberMoneyEntity> findByMembershipId(@Param("membershipId") Long membershipId);
+
+
 }

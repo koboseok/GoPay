@@ -2,6 +2,8 @@ package com.gopay.money.adapter.out.persistence;
 
 
 import com.gopay.common.PersistenceAdapter;
+import com.gopay.money.application.port.in.CreateMemberMoneyPort;
+import com.gopay.money.application.port.in.GetMemberMoneyPort;
 import com.gopay.money.application.port.out.IncreaseMoneyPort;
 import com.gopay.money.domain.MemberMoney;
 import com.gopay.money.domain.MoneyChangingRequest;
@@ -11,7 +13,7 @@ import java.util.List;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class MoneyChangingRequestPersistenceAdapter implements IncreaseMoneyPort {
+public class MoneyChangingRequestPersistenceAdapter implements IncreaseMoneyPort, CreateMemberMoneyPort, GetMemberMoneyPort {
 
     private final MoneyChangingRequestRepository moneyChangingRequestRepository;
     private final MemberMoneyRepository memberMoneyRepository;
@@ -36,7 +38,7 @@ public class MoneyChangingRequestPersistenceAdapter implements IncreaseMoneyPort
 
         MemberMoneyEntity memberMoneyEntity;
         try{
-            List<MemberMoneyEntity> entityList = memberMoneyRepository.findByMemberShipId(Long.parseLong(membershipId.getMembershipId()));
+            List<MemberMoneyEntity> entityList = memberMoneyRepository.findByMembershipId(Long.parseLong(membershipId.getMembershipId()));
             memberMoneyEntity = entityList.get(0);
 
             memberMoneyEntity.setBalance(memberMoneyEntity.getBalance() + increaseMoneyAccount);
@@ -46,11 +48,42 @@ public class MoneyChangingRequestPersistenceAdapter implements IncreaseMoneyPort
         } catch (Exception e) {
             memberMoneyEntity = new MemberMoneyEntity(
                     Long.parseLong(membershipId.getMembershipId()),
-                    increaseMoneyAccount
+                    0,""
             );
 
             return memberMoneyRepository.save(memberMoneyEntity);
 
         }
     }
+
+
+    @Override
+    public void createMemberMoney(MemberMoney.MembershipId memberId, MemberMoney.MoneyAggregateIdentifier aggregateIdentifier) {
+        // TODO: membershipId check ipc membership-service
+
+        MemberMoneyEntity entity = MemberMoneyEntity.builder()
+                .membershipId(Long.parseLong(memberId.getMembershipId()))
+                .balance(0)
+                .aggregateIdentifier(aggregateIdentifier.getAggregateIdentifier())
+                .build();
+
+        memberMoneyRepository.save(entity);
+    }
+
+
+    @Override
+    public MemberMoneyEntity getMemberMoney(MemberMoney.MembershipId memberId) {
+        MemberMoneyEntity entity;
+        List<MemberMoneyEntity> entityList =  memberMoneyRepository.findByMembershipId(Long.parseLong(memberId.getMembershipId()));
+        if(entityList.isEmpty()){
+            entity = new MemberMoneyEntity(
+                    Long.parseLong(memberId.getMembershipId()),
+                    0, ""
+            );
+            entity = memberMoneyRepository.save(entity);
+            return entity;
+        }
+        return  entityList.get(0);
+    }
+
 }

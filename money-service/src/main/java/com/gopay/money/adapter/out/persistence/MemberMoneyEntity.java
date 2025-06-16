@@ -1,9 +1,6 @@
 package com.gopay.money.adapter.out.persistence;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,18 +13,22 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class MemberMoneyEntity {
 
     @Id
     @GeneratedValue
     private Long memberMoneyId;
-    private Long memberShipId;
+    private Long membershipId;
     private int balance; // 0: 증액, 1: 감액
 
+    private String aggregateIdentifier;
 
 
-    public MemberMoneyEntity(Long memberShipId, int balance) {
-        this.memberShipId = memberShipId;
+
+    public MemberMoneyEntity(Long membershipId, int balance, String aggregateIdentifier) {
+        this.membershipId = membershipId;
         this.balance = balance;
+        this.aggregateIdentifier = aggregateIdentifier;
     }
 }

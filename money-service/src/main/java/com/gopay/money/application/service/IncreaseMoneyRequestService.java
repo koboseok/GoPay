@@ -5,16 +5,18 @@ import com.gopay.common.CountDownLatchManager;
 import com.gopay.common.RechargingMoneyTask;
 import com.gopay.common.SubTask;
 import com.gopay.common.UseCase;
+import com.gopay.money.adapter.axon.command.IncreaseMemberMoneyCommand;
+import com.gopay.money.adapter.axon.command.MemberMoneyCreatedCommand;
 import com.gopay.money.adapter.out.persistence.MemberMoneyEntity;
 import com.gopay.money.adapter.out.persistence.MoneyChangingRequestMapper;
-import com.gopay.money.application.port.in.IncreaseMoneyRequestCommand;
-import com.gopay.money.application.port.in.IncreaseMoneyRequestUseCase;
-import com.gopay.money.application.port.out.GetMemBershipPort;
+import com.gopay.money.application.port.in.*;
+import com.gopay.money.application.port.out.GetMembershipPort;
 import com.gopay.money.application.port.out.IncreaseMoneyPort;
 import com.gopay.money.application.port.out.SendRechargingMoneyTaskPort;
 import com.gopay.money.domain.MemberMoney;
 import com.gopay.money.domain.MoneyChangingRequest;
 import lombok.RequiredArgsConstructor;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -25,14 +27,19 @@ import java.util.UUID;
 @UseCase
 @RequiredArgsConstructor
 @Transactional
-public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase {
+public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase, CreateMemberMoneyUseCase {
 
     private final CountDownLatchManager countDownLatchManager;
-    private final GetMemBershipPort getMemBershipPort;
+    private final GetMembershipPort getMemBershipPort;
     private final SendRechargingMoneyTaskPort sendRechargingMoneyTaskPort;
     private final IncreaseMoneyPort registerBankAccountPort;
     private final MoneyChangingRequestMapper mapper;
     private final IncreaseMoneyPort increaseMoneyPort;
+
+    private final CommandGateway commandGateway; // axon
+
+    private final CreateMemberMoneyPort createMemberMoneyPort;
+    private final GetMemberMoneyPort getMemberMoneyPort;
 
 
     @Override
@@ -151,6 +158,54 @@ public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase 
 
         // 5. Consume ok, Logic
         return null;
+    }
+
+
+    @Override
+    public void createMemberMoney(CreateMemberMoneyCommand command) {
+        MemberMoneyCreatedCommand axonCommand = new MemberMoneyCreatedCommand(command.getMembershipId());
+        commandGateway.send(axonCommand).whenComplete((result, throwable) -> {
+            if (throwable != null) {
+                System.out.println("throwable = " + throwable);
+                throw new RuntimeException(throwable);
+            } else{
+                System.out.println("result = " + result);
+                createMemberMoneyPort.createMemberMoney(
+                        new MemberMoney.MembershipId(command.getMembershipId()),
+                        new MemberMoney.MoneyAggregateIdentifier(result.toString())
+                );
+            }
+        });
+    }
+
+
+    @Override
+    public void increaseMoneyRequestByEvent(IncreaseMoneyRequestCommand command) {
+
+        MemberMoneyEntity memberMoneyEntity = getMemberMoneyPort.getMemberMoney(
+                new MemberMoney.MembershipId(command.getTargetMembershipId())
+        );
+
+        String aggregateIdentifier = memberMoneyEntity.getAggregateIdentifier();
+        // command
+        commandGateway.send(IncreaseMemberMoneyCommand.builder()
+                        .aggregateIdentifier(aggregateIdentifier)
+                        .membershipId(command.getTargetMembershipId())
+                        .amount(command.getAmount()).build())
+                .whenComplete(
+                        (result, throwable) -> {
+                            if (throwable != null) {
+                                throwable.printStackTrace();
+                                throw new RuntimeException(throwable);
+                            } else {
+                                // Increase money -> money incr
+                                System.out.println("increaseMoney result = " + result);
+                                increaseMoneyPort.increaseMoney(
+                                        new MemberMoney.MembershipId(command.getTargetMembershipId())
+                                        , command.getAmount());
+                            }
+                        }
+                );
     }
 }
 

@@ -23,7 +23,6 @@ public class LoggingAspect {
     // 실제 비지니스로직 수행 이전에 위에 선언된 패키지 안에 있는 메서드들이 호출될때 먼저 실행되는 코드블럭
     public void beforeMethodExecution(@NotNull JoinPoint joinPoint) {
 
-        System.out.println("@@@@@ 타냐타냐타냐 ?!");
         String methodName = joinPoint.getSignature().getName();
 
         loggingProducer.sendMessage("logging", "Before executing method: " + methodName);

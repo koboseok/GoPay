@@ -2,6 +2,8 @@ package com.gopay.money.adapter.in.web;
 
 
 import com.gopay.common.WebAdapter;
+import com.gopay.money.application.port.in.CreateMemberMoneyCommand;
+import com.gopay.money.application.port.in.CreateMemberMoneyUseCase;
 import com.gopay.money.application.port.in.IncreaseMoneyRequestCommand;
 import com.gopay.money.application.port.in.IncreaseMoneyRequestUseCase;
 import com.gopay.money.domain.MoneyChangingRequest;
@@ -20,6 +22,7 @@ public class RequestMoneyChangingController {
     private final IncreaseMoneyRequestUseCase increaseMoneyRequestUseCase;
     private final MoneyChangingResultDetailMapper mapper;
 //    private final DecreaseMoneyRequestUseCase decreaseMoneyRequestUseCase;
+    private final CreateMemberMoneyUseCase createMemberMoneyUseCase;
 
     // TODO: select
 
@@ -83,5 +86,24 @@ public class RequestMoneyChangingController {
         // return decreaseMoneyRequestUseCase.decreaseMoneyChangingRequest(command);
         return null;
     }
+
+
+    @PostMapping(path = "/money/create-member-money")
+    void createMemberMoney (@RequestBody CreateMemberMoneyRequest request) {
+        createMemberMoneyUseCase.createMemberMoney(
+                CreateMemberMoneyCommand.builder().membershipId(request.getMembershipId()).build());
+    }
+
+
+    @PostMapping(path = "/money/increase-eda")
+    void increaseMoneyChangingRequestByEvent(@RequestBody IncreaseMoneyChangingRequest request) {
+        IncreaseMoneyRequestCommand command = IncreaseMoneyRequestCommand.builder()
+                .targetMembershipId(request.getTargetMembershipId())
+                .amount(request.getAmount())
+                .build();
+
+        increaseMoneyRequestUseCase.increaseMoneyRequestByEvent(command);
+    }
+
 
 }
