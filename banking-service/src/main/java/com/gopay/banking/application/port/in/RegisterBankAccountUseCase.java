@@ -9,4 +9,5 @@ public interface RegisterBankAccountUseCase {
     // 비즈니스 로직 정의
 
     RegisteredBankAccount registerBankAccount(RegisterBankAccountCommand command);
+    void registerBankAccountByEvent(RegisterBankAccountCommand command);
 }

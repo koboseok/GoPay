@@ -117,6 +117,7 @@ services:
       - KAFKA_CLUSTERS_BOOTSTRAPSERVERS=kafka:29092
       - LOGGING_TOPIC=gopay.logging.out.stdout
       - SERVICE_MEMBERSHIP_URL=http://membership-service:8080
+      - SERVICE_BANKING_URL=http://banking-service:8080
 
   money-service:
     image: gopay-money-service:1.0.0
@@ -141,6 +142,7 @@ services:
       - SERVICE_MEMBERSHIP_URL=http://membership-service:8080
       - TASK_TOPIC=gopay.task.topic
       - TASK_RESULT_TOPIC=gopay.task.result.topic
+      - SERVICE_BANKING_URL=http://banking-service:8080
 
   logging-consumer:
     image: gopay-logging-consumer:1.0.0

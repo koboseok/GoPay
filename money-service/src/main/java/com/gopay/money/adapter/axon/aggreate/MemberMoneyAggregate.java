@@ -2,8 +2,12 @@ package com.gopay.money.adapter.axon.aggreate;
 
 import com.gopay.money.adapter.axon.command.IncreaseMemberMoneyCommand;
 import com.gopay.money.adapter.axon.command.MemberMoneyCreatedCommand;
+import com.gopay.money.adapter.axon.command.RechargingMoneyRequestCreateCommand;
 import com.gopay.money.adapter.axon.event.IncreaseMemberMoneyEvent;
 import com.gopay.money.adapter.axon.event.MemberMoneyCreatedEvent;
+import com.gopay.money.adapter.axon.event.RechargingRequestCreatedEvent;
+import com.gopay.money.application.port.out.GetRegisteredBankAccountPort;
+import com.gopay.money.application.port.out.RegisteredBankAccountAggregateIdentifier;
 import lombok.Data;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -40,6 +44,29 @@ public class MemberMoneyAggregate {
         apply(new IncreaseMemberMoneyEvent(id, command.getMembershipId(), command.getAmount()));
         return id;
     }
+
+    @CommandHandler
+    public void handler(RechargingMoneyRequestCreateCommand command, GetRegisteredBankAccountPort getRegisteredBankAccountPort){
+        System.out.println("RechargingMoneyRequestCreateCommand Handler");
+        id = command.getAggregateIdentifier();
+
+
+        // new RechargingRequestCreatedEvent
+        // banking 정보가 필요해요. -> bank svc (get RegisteredBankAccount) 를 위한. Port.
+        RegisteredBankAccountAggregateIdentifier registeredBankAccountAggregateIdentifier
+                = getRegisteredBankAccountPort.getRegisteredBankAccount(command.getMembershipId());
+
+        // Saga Start
+        apply(new RechargingRequestCreatedEvent(
+                command.getRechargingRequestId(),
+                command.getMembershipId(),
+                command.getAmount(),
+                registeredBankAccountAggregateIdentifier.getAggregateIdentifier(),
+                registeredBankAccountAggregateIdentifier.getBankName(),
+                registeredBankAccountAggregateIdentifier.getBankAccountNumber()
+        ));
+    }
+
 
     @EventSourcingHandler
     public void on(MemberMoneyCreatedEvent event) {

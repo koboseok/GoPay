@@ -44,4 +44,17 @@ public class RegisterBankAccountController {
         return registeredBankAccount;
     }
 
+
+    @PostMapping(path = "/banking/account/register-eda")
+    void registeredBankAccountByEvent(@RequestBody RegisterBankAccountRequest request) {
+        RegisterBankAccountCommand command = RegisterBankAccountCommand.builder()
+                .membershipId(request.getMembershipId())
+                .bankName(request.getBankName())
+                .bankAccountNumber(request.getBankAccountNumber())
+                .linkedStatusIsValid(request.isLinkedStatusIsValid())
+                .build();
+
+        registerBankAccountUseCase.registerBankAccountByEvent(command);
+    }
+
 }

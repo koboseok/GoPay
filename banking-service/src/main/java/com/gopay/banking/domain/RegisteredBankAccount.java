@@ -18,18 +18,23 @@ public class RegisteredBankAccount {
     @Getter private final String bankName; // enum
     @Getter private final String bankAccountNumber;
     @Getter private final boolean linkedStatusIsValid;
+    @Getter private final String aggregateIdentifier;
 
-
-    public static RegisteredBankAccount generateRegisteredBankAccount(
-            RegisteredBankAccountId registeredBankAccountId, MembershipId membershipId, BankName bankName,
-            BankAccountNumber bankAccountNumber, LinkedStatusIsValid linkedStatusIsValid) {
-
+    public static RegisteredBankAccount generateRegisteredBankAccount (
+            RegisteredBankAccount.RegisteredBankAccountId registeredBankAccountId,
+            RegisteredBankAccount.MembershipId membershipId,
+            RegisteredBankAccount.BankName bankName,
+            RegisteredBankAccount.BankAccountNumber bankAccountNumber,
+            RegisteredBankAccount.LinkedStatusIsValid linkedStatusIsValid,
+            RegisteredBankAccount.AggregateIdentifier aggregateIdentifier
+    ){
         return new RegisteredBankAccount(
                 registeredBankAccountId.registeredBankAccountId,
                 membershipId.membershipId,
                 bankName.bankName,
                 bankAccountNumber.bankAccountNumber,
-                linkedStatusIsValid.linkedStatusIsValid
+                linkedStatusIsValid.linkedStatusIsValid,
+                aggregateIdentifier.getAggregateIdentifier()
         );
     }
 
@@ -71,6 +76,14 @@ public class RegisteredBankAccount {
             this.linkedStatusIsValid = value;
         }
         boolean linkedStatusIsValid ;
+    }
+
+    @Value
+    public static class AggregateIdentifier {
+        public AggregateIdentifier(String value) {
+            this.aggregateIdentifier = value;
+        }
+        String aggregateIdentifier;
     }
 
 }

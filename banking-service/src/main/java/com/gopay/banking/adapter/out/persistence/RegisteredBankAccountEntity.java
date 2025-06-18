@@ -3,7 +3,6 @@ package com.gopay.banking.adapter.out.persistence;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +14,6 @@ import javax.persistence.Table;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class RegisteredBankAccountEntity {
 
     @Id
@@ -26,10 +24,24 @@ public class RegisteredBankAccountEntity {
     private String bankAccountNumber;
     private boolean linkedStatusIsValid;
 
-    public RegisteredBankAccountEntity(String membershipId, String bankName, String bankAccountNumber, boolean linkedStatusIsValid) {
+    private String aggregateIdentifier;
+    public RegisteredBankAccountEntity(String membershipId, String bankName, String bankAccountNumber, boolean linkedStatusIsValid, String aggregateIdentifier){
         this.membershipId = membershipId;
         this.bankName = bankName;
         this.bankAccountNumber = bankAccountNumber;
         this.linkedStatusIsValid = linkedStatusIsValid;
+        this.aggregateIdentifier = aggregateIdentifier;
+    }
+
+    @Override
+    public String toString() {
+        return "RegisteredBankAccountJpaEntity{" +
+                "registeredBankAccountId=" + registeredBankAccountId +
+                ", membershipId='" + membershipId + '\'' +
+                ", bankName='" + bankName + '\'' +
+                ", bankAccountNumber='" + bankAccountNumber + '\'' +
+                ", linkedStatusIsValid=" + linkedStatusIsValid +
+                ", aggregateIdentifier='" + aggregateIdentifier + '\'' +
+                '}';
     }
 }
