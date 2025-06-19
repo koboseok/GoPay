@@ -31,6 +31,7 @@ public class CommonHttpClient {
     public CompletableFuture<HttpResponse<String>> sendPostRequest(String url, String body) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
+                .header("Content-Type", "application/json") // 👈 헤더 추가!
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
 

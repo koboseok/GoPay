@@ -2,15 +2,15 @@ package com.gopay.money.adapter.in.web;
 
 
 import com.gopay.common.WebAdapter;
-import com.gopay.money.application.port.in.CreateMemberMoneyCommand;
-import com.gopay.money.application.port.in.CreateMemberMoneyUseCase;
-import com.gopay.money.application.port.in.IncreaseMoneyRequestCommand;
-import com.gopay.money.application.port.in.IncreaseMoneyRequestUseCase;
+import com.gopay.money.application.port.in.*;
+import com.gopay.money.domain.MemberMoney;
 import com.gopay.money.domain.MoneyChangingRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @WebAdapter
@@ -75,15 +75,14 @@ public class RequestMoneyChangingController {
     }
 
 
-    @PostMapping(path = "/money/decrease")
+    @PostMapping(path = "/money/decrease-eda")
     MoneyChangingResultDetail decreaseMoneyChangingRequest(@RequestBody DecreaseMoneyChangingRequest request) {
-        // request ~~
-        // request -> command
-        // UseCase ~~ (request x, command o)
+        IncreaseMoneyRequestCommand command = IncreaseMoneyRequestCommand.builder()
+                .targetMembershipId(request.getTargetMembershipId())
+                .amount(request.getAmount() * -1) // 사실상 감액
+                .build();
 
-
-        //
-        // return decreaseMoneyRequestUseCase.decreaseMoneyChangingRequest(command);
+        increaseMoneyRequestUseCase.increaseMoneyRequestByEvent(command);
         return null;
     }
 
@@ -103,6 +102,18 @@ public class RequestMoneyChangingController {
                 .build();
 
         increaseMoneyRequestUseCase.increaseMoneyRequestByEvent(command);
+    }
+
+
+
+    @PostMapping(path = "/money/member-money")
+    List<MemberMoney> findMemberMoneyListByMembershipIds(@RequestBody FindMemberMoneyListByMembershipIdsRequest request) {
+
+        FindMemberMoneyListByMembershipIdsCommand command = FindMemberMoneyListByMembershipIdsCommand.builder()
+                .membershipIds(request.getMembershipIds())
+                .build();
+
+        return increaseMoneyRequestUseCase.findMemberMoneyListByMembershipIds(command);
     }
 
 

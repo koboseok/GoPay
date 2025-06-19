@@ -16,7 +16,7 @@ public class Membership {
     // 고객정보, 핵심 도메인
     // 안전하게 쓸 수 있게 시스템적으로 강제해놓음
 
-    @Getter private final String memberShipId;
+    @Getter private final String membershipId;
 
     @Getter private final String name;
 

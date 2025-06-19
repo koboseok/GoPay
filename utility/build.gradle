@@ -1,0 +1,12 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+    implementation 'org.json:json:20200518'
+}

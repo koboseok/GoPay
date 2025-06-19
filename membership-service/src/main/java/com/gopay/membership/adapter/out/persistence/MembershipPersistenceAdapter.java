@@ -7,6 +7,8 @@ import com.gopay.membership.application.port.out.RegisterMembershipPort;
 import com.gopay.membership.domain.Membership;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class MembershipPersistenceAdapter implements RegisterMembershipPort, FindMembershipPort, ModifyMembershipPort {
@@ -33,6 +35,12 @@ public class MembershipPersistenceAdapter implements RegisterMembershipPort, Fin
 
     }
 
+    @Override
+    public List<MembershipEntity> findMembershipListByAddress(Membership.MembershipAddress membershipAddress) {
+        // 관악구, 서초구, 강남구 중 하나
+        String address = membershipAddress.getAddressValue();
+        return membershipRepository.findByAddress(address);
+    }
 
     @Override
     public MembershipEntity modifyMembership(Membership.MembershipId membershipId, Membership.MembershipName membershipName, Membership.MembershipEmail membershipEmail, Membership.MembershipAddress membershipAddress, Membership.MembershipIsValid membershipIsValid, Membership.MembershipIsCorp membershipIsCorp) {

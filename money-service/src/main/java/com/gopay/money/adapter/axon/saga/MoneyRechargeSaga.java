@@ -9,6 +9,7 @@ import com.gopay.common.event.RollbackFirmbankingFinishedEvent;
 import com.gopay.money.adapter.axon.event.RechargingRequestCreatedEvent;
 import com.gopay.money.adapter.out.persistence.MemberMoneyEntity;
 import com.gopay.money.application.port.out.IncreaseMoneyPort;
+import com.gopay.money.domain.MemberMoney;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -118,13 +119,15 @@ public class MoneyRechargeSaga {
         }
 
         // DB Update 명령.
-        MemberMoneyEntity resultEntity = null;
 
-//        MemberMoneyEntity resultEntity =
-//                increaseMoneyPort.increaseMoney(
-//                        new MemberMoney.MembershipId(event.getMembershipId())
-//                        , event.getMoneyAmount()
-//                );
+        // rollback test 용도
+//        MemberMoneyEntity resultEntity = null;
+
+        MemberMoneyEntity resultEntity =
+                increaseMoneyPort.increaseMoney(
+                        new MemberMoney.MembershipId(event.getMembershipId())
+                        , event.getMoneyAmount()
+                );
 
         if (resultEntity == null) {
             // 실패 시, 롤백 이벤트

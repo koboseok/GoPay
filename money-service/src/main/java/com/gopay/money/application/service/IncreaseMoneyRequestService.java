@@ -8,8 +8,10 @@ import com.gopay.common.UseCase;
 import com.gopay.money.adapter.axon.command.MemberMoneyCreatedCommand;
 import com.gopay.money.adapter.axon.command.RechargingMoneyRequestCreateCommand;
 import com.gopay.money.adapter.out.persistence.MemberMoneyEntity;
+import com.gopay.money.adapter.out.persistence.MemberMoneyMapper;
 import com.gopay.money.adapter.out.persistence.MoneyChangingRequestMapper;
 import com.gopay.money.application.port.in.*;
+import com.gopay.money.application.port.out.GetMemberMoneyListPort;
 import com.gopay.money.application.port.out.GetMembershipPort;
 import com.gopay.money.application.port.out.IncreaseMoneyPort;
 import com.gopay.money.application.port.out.SendRechargingMoneyTaskPort;
@@ -34,12 +36,16 @@ public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase,
     private final SendRechargingMoneyTaskPort sendRechargingMoneyTaskPort;
     private final IncreaseMoneyPort registerBankAccountPort;
     private final MoneyChangingRequestMapper mapper;
+    private final MemberMoneyMapper memberMoneyMapper;
     private final IncreaseMoneyPort increaseMoneyPort;
 
     private final CommandGateway commandGateway; // axon
 
     private final CreateMemberMoneyPort createMemberMoneyPort;
     private final GetMemberMoneyPort getMemberMoneyPort;
+    private final GetMemberMoneyListPort getMemberMoneyListPort;
+
+
 
 
     @Override
@@ -227,6 +233,20 @@ public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase,
 //                    }
 //                }
 //        );
+    }
+
+
+    @Override
+    public List<MemberMoney> findMemberMoneyListByMembershipIds(FindMemberMoneyListByMembershipIdsCommand command) {
+        // 여러개의 membership Ids 를 기준으로, memberMoney 정보를 가져와야 해요.
+        List<MemberMoneyEntity> memberMoneyJpaEntityList = getMemberMoneyListPort.getMemberMoneyPort(command.getMembershipIds());
+        List<MemberMoney> memberMoneyList = new ArrayList<>();
+
+        for(MemberMoneyEntity memberMoneyJpaEntity : memberMoneyJpaEntityList) {
+            memberMoneyList.add(memberMoneyMapper.mapToDomainEntity(memberMoneyJpaEntity));
+        }
+
+        return memberMoneyList;
     }
 }
 

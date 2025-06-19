@@ -4,16 +4,18 @@ package com.gopay.money.adapter.out.persistence;
 import com.gopay.common.PersistenceAdapter;
 import com.gopay.money.application.port.in.CreateMemberMoneyPort;
 import com.gopay.money.application.port.in.GetMemberMoneyPort;
+import com.gopay.money.application.port.out.GetMemberMoneyListPort;
 import com.gopay.money.application.port.out.IncreaseMoneyPort;
 import com.gopay.money.domain.MemberMoney;
 import com.gopay.money.domain.MoneyChangingRequest;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class MoneyChangingRequestPersistenceAdapter implements IncreaseMoneyPort, CreateMemberMoneyPort, GetMemberMoneyPort {
+public class MoneyChangingRequestPersistenceAdapter implements IncreaseMoneyPort, CreateMemberMoneyPort, GetMemberMoneyPort, GetMemberMoneyListPort {
 
     private final MoneyChangingRequestRepository moneyChangingRequestRepository;
     private final MemberMoneyRepository memberMoneyRepository;
@@ -86,4 +88,19 @@ public class MoneyChangingRequestPersistenceAdapter implements IncreaseMoneyPort
         return  entityList.get(0);
     }
 
+
+    @Override
+    public List<MemberMoneyEntity> getMemberMoneyPort(List<String> membershipIds) {
+        // membershipIds 를 기준으로, 여러개의 MemberMoneyJpaEntity 를 가져온다.
+        return memberMoneyRepository.fineMemberMoneyListByMembershipIds(convertMembershipIds(membershipIds));
+    }
+
+    private List<Long> convertMembershipIds(List<String> membershipIds) {
+        List<Long> longList = new ArrayList<>();
+        // membershipIds 를 Long 타입의 List 로 변환한다.
+        for(String membershipId : membershipIds) {
+            longList.add(Long.parseLong(membershipId));
+        }
+        return longList;
+    }
 }
