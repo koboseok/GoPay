@@ -31,7 +31,7 @@ public class DummyMoneyDataSimulator {
         while (true) {
             // 증액 머니, 감액 머니
             int amount = random.nextInt(20001) + 1 ; // 0 ~ 20,000원을 증액 또는 감액 랜덤하게 생성
-            int targetMembershipId = random.nextInt(10001) + 1; // 1 ~ 10,000 사이의 유저 id 랜덤하게 생성
+            int targetMembershipId = random.nextInt(100) + 1; // 1 ~ 10,000 사이의 유저 id 랜덤하게 생성
 
             //
 
@@ -40,7 +40,7 @@ public class DummyMoneyDataSimulator {
 
 
             // 비동기 작업이 db까지 반영되기를 기다리는 시간
-            Thread.sleep(100);
+            Thread.sleep(1000);
 
             // 증액, 감액 요청을 받을 준비된 고객
             readyMemberList.add(targetMembershipId);
@@ -53,7 +53,7 @@ public class DummyMoneyDataSimulator {
             increaseMemberMoneySimulator(DECREASE_API_ENDPOINT, amount, decreaseTargetMembershipId);
 
             try {
-                Thread.sleep(100); // Wait for
+                Thread.sleep(1000); // Wait for
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
