@@ -1,4 +1,4 @@
-![header](https://capsule-render.vercel.app/api?type=wave&color=auto&height=300&section=header&text=GoPay%20Project&fontSize=90)
+![header](https://capsule-render.vercel.app/api?type=Waving&color=auto&height=300&section=header&text=GoPay%20Project&fontSize=90)
 
 
 패스트캠퍼스 온라인 강의 기반으로 구현한 프로젝트 입니다.
