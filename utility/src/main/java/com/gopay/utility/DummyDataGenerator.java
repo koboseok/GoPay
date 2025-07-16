@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Random;
 
 // 더미 데이터를 활용한 테스트 모듈
@@ -26,7 +27,9 @@ public class DummyDataGenerator {
             Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
             // 더미 데이터 생성
-            generateDummyData(conn);
+//            generateDummyData(conn);
+
+            generateDummyPaymentData(conn);
 
             // 연결 종료
             conn.close();
@@ -63,4 +66,42 @@ public class DummyDataGenerator {
         // PreparedStatement 닫기
         pstmt.close();
     }
+
+
+    // payment data
+    private static void generateDummyPaymentData (Connection conn) throws SQLException {
+        Random random = new Random();
+
+        try {
+            String query = "INSERT INTO payment_request (payment_id, request_membership_id, request_price, franchise_id, franchise_fee_rate, payment_status, approved_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+
+            int numberOfTestData = 100;
+            for (int i = 0; i < numberOfTestData; i++) {
+                // 랜덤 값 생성
+                long paymentId = (random.nextInt(900) + 1L); // 1 ~ 900
+                String membershipId = "" + (random.nextInt(100) + 1); // 1 ~ 100
+                int price = (random.nextInt(9) + 1) * 1000; // 1000 ~ 9000
+                String franchiseId =  "" + (random.nextInt(10) + 1L);
+                String franchiseFeeRate = String.format("%.2f", random.nextDouble() * 5.0);
+                int paymentStatus = 0;
+                Date approvedAt = new Date(System.currentTimeMillis() - random.nextInt(10000000));
+
+                preparedStatement.setLong(1, paymentId);
+                preparedStatement.setString(2, membershipId);
+                preparedStatement.setInt(3, price);
+                preparedStatement.setString(4, franchiseId);
+                preparedStatement.setString(5, franchiseFeeRate);
+                preparedStatement.setInt(6, paymentStatus);
+                preparedStatement.setDate(7, new java.sql.Date(approvedAt.getTime()));
+                preparedStatement.executeUpdate();
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conn.close();
+        }
+    }
+
 }
