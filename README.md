@@ -72,3 +72,47 @@
 #### Stack
 - Spring Boot, Java 11, Spring Data JPA, Mysql, Lombok, Gradle, Axon Framework, Docker, Docker Compose
 
+
+## Execution
+```
+./gradlew docker
+docker-compose up -d
+```
+
+## Service EndPoint & Swagger UI
+- membership-service
+  - http://localhost:8081/membership/
+  - http://localhost:8081/swagger-ui.html
+    
+- banking-service
+  - http://localhost:8082/banking/
+  - http://localhost:8082/swagger-ui.html
+    
+- money-service
+  - http://localhost:8083/money/
+  - http://localhost:8083/swagger-ui.html
+    
+- remittance-service
+  - http://localhost:8084/remittance/
+  - http://localhost:8084/swagger-ui.html
+    
+- payment-service
+  - http://localhost:8085/payment/
+  - http://localhost:8085/swagger-ui.html
+    
+- settlment-service
+  - http://localhost:8086/settlment/
+  - http://localhost:8086/swagger-ui.html
+
+- mysql
+  - http://localhost:3307
+  - root password: rootpassword
+  - database: gopay
+  - user / pw : mysqluser / mysqlpw
+
+- kafka ui
+  - http://localhost:8989
+
+- axon server dashboard
+   - http://localhost:8024
+
