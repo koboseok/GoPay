@@ -115,4 +115,32 @@ docker-compose up -d
 
 - axon server dashboard
    - http://localhost:8024
+ 
+
+## Sample Screenshots
+
+#### :mailbox_with_mail: Docker, Docker-Compose
+<img width="2303" height="1274" alt="스크린샷 2025-07-16 오후 2 38 20" src="https://github.com/user-attachments/assets/62b9192d-02cf-45b7-b34a-23ec4678cd35" />
+
+
+#### :bookmark_tabs: Swagger-ui
+<img width="1456" height="572" alt="스크린샷 2025-07-16 오후 2 44 58" src="https://github.com/user-attachments/assets/f9cc4fc1-d906-4018-9daf-e09816c96e16" />
+
+
+#### :chart_with_downwards_trend: Kafka-ui
+<img width="1452" height="589" alt="스크린샷 2025-07-16 오후 2 47 02" src="https://github.com/user-attachments/assets/7f22326a-564b-4f04-83da-06553a05ce84" />
+
+
+#### :chart_with_upwards_trend: Axon Framwork-ui
+<img width="1479" height="847" alt="스크린샷 2025-07-16 오후 2 49 18" src="https://github.com/user-attachments/assets/c620fb81-f34d-4aa0-bac4-6b3d97d3d504" />
+
+
+#### :floppy_disk: Database
+<img width="1350" height="494" alt="스크린샷 2025-07-16 오후 2 51 59" src="https://github.com/user-attachments/assets/5501b645-dc82-41ab-adbc-55e525b1b1c4" />
+
+
+
+
+
+
 
