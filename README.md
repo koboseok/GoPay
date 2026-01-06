@@ -1,8 +1,6 @@
 ![header](https://capsule-render.vercel.app/api?type=Waving&color=auto&height=300&section=header&text=GoPay%20Project&fontSize=90)
 
 
-패스트캠퍼스 온라인 강의 기반으로 구현한 프로젝트 입니다.
-
 일반적인 간편결제 도메인을 주제로, MSA를 중심적으로 학습했습니다.
 
 회원(Membership), 뱅킹(Banking), 머니(Money), 송금(Remittance), 결제(Payment), 정산(Settlement) 6개의 서비스로 구성되어 있으며, 각각의 독립적인 프로젝트로 구성되어 있습니다.
